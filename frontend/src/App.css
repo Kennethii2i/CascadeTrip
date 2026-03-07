@@ -1,0 +1,146 @@
+/* アプリ全体のレイアウト */
+.app-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: sans-serif;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+
+/* タイムラインの各要素 */
+.timeline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 場所の箱のデザイン */
+.location-box {
+  width: 100%;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px 15px 20px 15px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  text-align: center;
+
+  cursor: grab; /* マウスカーソルを「開いた手」にする */
+  touch-action: none; /* スマホで触った時の誤作動を防ぐ */
+
+  position: relative; /* 削除ボタンの位置決めのため */
+}
+
+.location-box:active {
+  cursor: grabbing; /* マウスカーソルを「握った手」にする */
+  box-shadow: 0 8px 12px rgba(0,0,0,0.1); /* 影を濃くして浮き上がったように見せる */
+}
+
+.location-box h3 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+}
+
+.location-box p {
+  margin: 0;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+/* 移動を表す矢印部分 */
+.transit-box {
+  padding: 15px 0;
+  color: #3498db;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.duration-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+/* プルダウンのデザイン */
+.duration-select {
+  padding: 6px 10px;
+  margin-left: 10px;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background-color: #fdfdfd;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+.duration-select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.add-spot-form {
+  display: flex;
+  margin-top: 30px;
+  gap: 10px; /* 入力欄とボタンの隙間 */
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px dashed #bdc3c7;
+}
+
+.add-spot-input {
+  flex-grow: 1; /* 入力欄を横いっぱいに広げる */
+  padding: 10px 15px;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.add-spot-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.add-spot-button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-spot-button:hover {
+  background-color: #2980b9; /* マウスを乗せた時に少し暗くする */
+}
+
+.delete-button {
+  position: absolute; /* 箱の右上に絶対配置する */
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #bdc3c7;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.delete-button:hover {
+  color: #e74c3c; /* マウスを乗せたら赤くする */
+}
