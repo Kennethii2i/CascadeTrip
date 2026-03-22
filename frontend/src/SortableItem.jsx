@@ -2,7 +2,8 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-export function SortableItem({ item, phase, showTransit, onDurationChange, onTransitChange, onDelete }) {
+// ★引数に onTransitTimeChange を追加
+export function SortableItem({ item, phase, showTransit, onDurationChange, onTransitChange, onTransitTimeChange, onDelete }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.id });
 
   const style = {
@@ -10,7 +11,6 @@ export function SortableItem({ item, phase, showTransit, onDurationChange, onTra
     transition,
   };
 
-  // --- 宿泊ブロックの見た目 ---
   if (item.type === 'day-break') {
     return (
       <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="day-break-wrapper">
@@ -22,11 +22,9 @@ export function SortableItem({ item, phase, showTransit, onDurationChange, onTra
     );
   }
 
-  // --- 通常スポットの見た目 ---
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="item-wrapper">
       
-      {/* ★変更: 交通手段をスポットの「上」に配置 */}
       {showTransit && (
         <div className="transit-header">
           <select 
@@ -36,32 +34,47 @@ export function SortableItem({ item, phase, showTransit, onDurationChange, onTra
             onChange={(e) => onTransitChange(item.id, e.target.value)}
           >
             <option value="train">🚃 電車</option>
-            <option value="car">🚗 車・タクシー</option>
+            <option value="car">🚗 車</option>
             <option value="walk">🚶 徒歩</option>
           </select>
-          <span className="transit-time">↓ -- 分</span>
+          
+          <span style={{ margin: '0 5px' }}>で</span>
+
+          {/* ★変更: 移動時間もプルダウンで選べるようにした */}
+          <select
+            className="transit-time-select"
+            value={item.transitTime}
+            onPointerDown={(e) => e.stopPropagation()}
+            onChange={(e) => onTransitTimeChange(item.id, e.target.value)}
+          >
+            <option value="auto">✨ 自動 ({item.calculatedTransitTime || '--'}分)</option>
+            <option value="10">10分</option>
+            <option value="20">20分</option>
+            <option value="30">30分</option>
+            <option value="60">1時間</option>
+          </select>
         </div>
       )}
 
-      {/* メインの箱 */}
       <div className={`location-box ${phase === 'planning' ? 'compact-box' : ''}`}>
         <button className="delete-button" onPointerDown={(e) => e.stopPropagation()} onClick={() => onDelete(item.id)}>×</button>
         
         <h3>{item.location}</h3>
         
-        {/* フェーズ2（スケジューリング）の時だけ滞在時間を表示 */}
         {phase === 'scheduling' && (
           <div className="duration-wrapper">
-            滞在の目安: 
+            滞在: 
             <select
               value={item.duration}
-              onChange={(e) => onDurationChange(item.id, Number(e.target.value))}
+              onChange={(e) => onDurationChange(item.id, e.target.value)}
               onPointerDown={(e) => e.stopPropagation()} 
               className="duration-select"
             >
-              <option value="0">通過するだけ (0分)</option>
+              {/* ★変更: 滞在時間にも「自動」を追加 */}
+              <option value="auto">✨ おまかせ ({item.calculatedDuration || '--'}分)</option>
               <option value="30">サクッと (30分)</option>
               <option value="60">標準 (60分)</option>
+              <option value="90">ゆっくり (90分)</option>
               <option value="120">じっくり (120分)</option>
             </select>
           </div>

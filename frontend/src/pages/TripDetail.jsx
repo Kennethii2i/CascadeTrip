@@ -7,13 +7,21 @@ import { SortableItem } from '../SortableItem';
 
 export function TripDetail() {
   const navigate = useNavigate();
-  
   const [phase, setPhase] = useState('planning');
   const [newLocation, setNewLocation] = useState('');
   
+  // ★変更: durationとtransitTimeの初期値を 'auto' にし、バックエンドの計算結果(calculated〜)を持たせる
   const [route, setRoute] = useState([
-    { id: 1, type: 'spot', location: "東京駅", duration: 60, transitMode: 'train' },
-    { id: 2, type: 'spot', location: "浅草寺", duration: 90, transitMode: 'train' }
+    { 
+      id: 1, type: 'spot', location: "東京駅", 
+      transitMode: 'train', transitTime: 'auto', calculatedTransitTime: 15, // 移動
+      duration: 'auto', calculatedDuration: 30 // 滞在
+    },
+    { 
+      id: 2, type: 'spot', location: "浅草寺", 
+      transitMode: 'train', transitTime: 'auto', calculatedTransitTime: 25,
+      duration: 'auto', calculatedDuration: 90 
+    }
   ]);
 
   const handleDragEnd = (event) => {
@@ -30,7 +38,17 @@ export function TripDetail() {
   const handleAddSpot = (e) => {
     e.preventDefault();
     if (newLocation.trim() === '') return;
-    const newItem = { id: Date.now(), type: 'spot', location: newLocation, duration: 60, transitMode: 'train' };
+    
+    // ★モック: 本来はここでバックエンドから計算値を取得します
+    const mockCalcDuration = 60; // 仮の自動計算された滞在時間
+    const mockCalcTransit = 20;  // 仮の自動計算された移動時間
+
+    const newItem = { 
+      id: Date.now(), type: 'spot', location: newLocation, 
+      transitMode: 'train', transitTime: 'auto', calculatedTransitTime: mockCalcTransit,
+      duration: 'auto', calculatedDuration: mockCalcDuration
+    };
+    
     setRoute([...route, newItem]);
     setNewLocation('');
   };
@@ -40,12 +58,18 @@ export function TripDetail() {
     setRoute([...route, newItem]);
   };
 
+  // ★変更: 'auto' という文字列と、数値の両方を扱えるようにする
   const handleDurationChange = (id, newDuration) => {
-    setRoute(route.map(item => item.id === id ? { ...item, duration: Number(newDuration) } : item));
+    setRoute(route.map(item => item.id === id ? { ...item, duration: newDuration === 'auto' ? 'auto' : Number(newDuration) } : item));
   };
 
   const handleTransitChange = (id, newMode) => {
     setRoute(route.map(item => item.id === id ? { ...item, transitMode: newMode } : item));
+  };
+
+  // ★新規追加: 移動時間の手動変更
+  const handleTransitTimeChange = (id, newTime) => {
+    setRoute(route.map(item => item.id === id ? { ...item, transitTime: newTime === 'auto' ? 'auto' : Number(newTime) } : item));
   };
 
   const handleDelete = (id) => {
@@ -56,18 +80,11 @@ export function TripDetail() {
     <div className="app-container">
       <button onClick={() => navigate('/trips')} className="back-button">← 旅行一覧に戻る</button>
       
-      {/* ★新規: トグルスイッチによるモード切替 UI */}
       <div className="mode-toggle-container">
-        <button 
-          className={`mode-toggle-btn ${phase === 'planning' ? 'active' : ''}`}
-          onClick={() => setPhase('planning')}
-        >
+        <button className={`mode-toggle-btn ${phase === 'planning' ? 'active' : ''}`} onClick={() => setPhase('planning')}>
           📍 1. ルート・順番
         </button>
-        <button 
-          className={`mode-toggle-btn ${phase === 'scheduling' ? 'active' : ''}`}
-          onClick={() => setPhase('scheduling')}
-        >
+        <button className={`mode-toggle-btn ${phase === 'scheduling' ? 'active' : ''}`} onClick={() => setPhase('scheduling')}>
           ⏰ 2. 時間・移動・宿泊
         </button>
       </div>
@@ -91,6 +108,7 @@ export function TripDetail() {
                   showTransit={showTransit}
                   onDurationChange={handleDurationChange}
                   onTransitChange={handleTransitChange}
+                  onTransitTimeChange={handleTransitTimeChange} /* ★追加 */
                   onDelete={handleDelete}
                 />
               );
@@ -99,7 +117,6 @@ export function TripDetail() {
         </SortableContext>
       </DndContext>
 
-      {/* ★変更: コントロールパネルをスッキリさせました */}
       <div className="control-panel">
         <form onSubmit={handleAddSpot} className="add-spot-form" style={{ marginTop: 0 }}>
           <input
@@ -112,7 +129,6 @@ export function TripDetail() {
           <button type="submit" className="add-spot-button">追加</button>
         </form>
         
-        {/* ★変更: 宿泊ボタンは「時間・移動モード」の時だけ表示する */}
         {phase === 'scheduling' && (
           <button onClick={handleAddDayBreak} className="secondary-button" style={{ marginTop: '10px' }}>
             ＋ 宿泊（次の日）をリストに追加

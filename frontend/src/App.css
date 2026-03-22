@@ -251,6 +251,23 @@ h1 {
 }
 .transit-mode-select { border: none; background-color: transparent; color: #34495e; font-size: 0.9rem; cursor: pointer; outline: none; font-weight: bold; }
 .transit-time { color: #3498db; font-weight: bold; }
+.transit-time-select {
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  background-color: white;
+  color: #3498db;
+  font-weight: bold;
+  font-size: 0.85rem;
+  padding: 3px 5px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.transit-time-select:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
 
 /* --- 宿泊（次の日）の区切り線 --- */
 .day-break-wrapper { display: flex; justify-content: center; width: 100%; margin: 20px 0; cursor: grab; }
