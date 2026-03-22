@@ -1,4 +1,6 @@
-/* アプリ全体のレイアウト */
+/* =========================================
+   1. Base & Layout (アプリ全体の共通設定)
+========================================= */
 .app-container {
   max-width: 500px;
   margin: 0 auto;
@@ -13,85 +15,55 @@ h1 {
   margin-bottom: 30px;
 }
 
-/* タイムラインの各要素 */
-.timeline-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* 場所の箱のデザイン */
-.location-box {
-  width: 100%;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 15px 15px 20px 15px;
-  background-color: #ffffff;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  text-align: center;
-
-  cursor: grab; /* マウスカーソルを「開いた手」にする */
-  touch-action: none; /* スマホで触った時の誤作動を防ぐ */
-
-  position: relative; /* 削除ボタンの位置決めのため */
-}
-
-.location-box:active {
-  cursor: grabbing; /* マウスカーソルを「握った手」にする */
-  box-shadow: 0 8px 12px rgba(0,0,0,0.1); /* 影を濃くして浮き上がったように見せる */
-}
-
-.location-box h3 {
-  margin: 0 0 10px 0;
-  color: #2c3e50;
-}
-
-.location-box p {
-  margin: 0;
-  color: #7f8c8d;
-  font-size: 0.9rem;
-}
-
-/* 移動を表す矢印部分 */
-.transit-box {
-  padding: 15px 0;
+/* =========================================
+   2. Components (ボタンやフォームなどの部品)
+========================================= */
+/* 戻るボタン */
+.back-button {
+  background: none;
+  border: none;
   color: #3498db;
-  font-weight: bold;
-  font-size: 0.9rem;
-}
-
-.duration-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-  color: #7f8c8d;
-  font-size: 0.9rem;
-}
-
-/* プルダウンのデザイン */
-.duration-select {
-  padding: 6px 10px;
-  margin-left: 10px;
-  border: 1px solid #bdc3c7;
-  border-radius: 4px;
-  font-size: 0.95rem;
-  font-family: inherit;
-  background-color: #fdfdfd;
-  color: #2c3e50;
+  font-size: 1rem;
   cursor: pointer;
+  margin-bottom: 20px;
+  padding: 0;
+  text-align: left;
 }
 
-.duration-select:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+.back-button:hover {
+  color: #2980b9;
+  text-decoration: underline;
 }
 
+/* 新規作成 / 主要アクションボタン */
+.new-trip-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(46, 204, 113, 0.2);
+  transition: transform 0.1s, background-color 0.2s;
+}
+
+.new-trip-button:active {
+  transform: scale(0.98);
+}
+
+.new-trip-button:hover {
+  background-color: #27ae60;
+}
+
+/* スポット追加フォーム */
 .add-spot-form {
   display: flex;
   margin-top: 30px;
-  gap: 10px; /* 入力欄とボタンの隙間 */
+  gap: 10px;
   padding: 15px;
   background-color: #f8f9fa;
   border-radius: 8px;
@@ -99,7 +71,7 @@ h1 {
 }
 
 .add-spot-input {
-  flex-grow: 1; /* 入力欄を横いっぱいに広げる */
+  flex-grow: 1;
   padding: 10px 15px;
   border: 1px solid #bdc3c7;
   border-radius: 4px;
@@ -125,11 +97,30 @@ h1 {
 }
 
 .add-spot-button:hover {
-  background-color: #2980b9; /* マウスを乗せた時に少し暗くする */
+  background-color: #2980b9;
 }
 
+/* ログアウトボタン */
+.logout-button {
+  background: none;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* 削除(×)ボタン */
 .delete-button {
-  position: absolute; /* 箱の右上に絶対配置する */
+  position: absolute;
   top: 10px;
   right: 15px;
   background: none;
@@ -142,5 +133,170 @@ h1 {
 }
 
 .delete-button:hover {
-  color: #e74c3c; /* マウスを乗せたら赤くする */
+  color: #e74c3c;
+}
+
+/* =========================================
+   3. Pages (各画面の固有レイアウト)
+========================================= */
+/* --- ログイン画面 --- */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+.login-card {
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-card h1 { margin-bottom: 5px; color: #2c3e50; font-size: 2rem; }
+.login-subtitle { color: #7f8c8d; margin-bottom: 30px; font-size: 0.9rem; }
+.login-form { display: flex; flex-direction: column; gap: 20px; }
+
+.form-group { display: flex; flex-direction: column; text-align: left; gap: 8px; }
+.form-group label { font-size: 0.9rem; color: #34495e; font-weight: bold; }
+.form-group input { padding: 12px; border: 1px solid #bdc3c7; border-radius: 6px; font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s; }
+.form-group input:focus { outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); }
+
+.login-button { margin-top: 10px; padding: 14px; background-color: #3498db; color: white; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
+.login-button:hover { background-color: #2980b9; }
+
+/* --- 旅行一覧画面 --- */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.list-header h1 { margin-bottom: 0; }
+
+.trip-list { display: flex; flex-direction: column; gap: 15px; }
+
+.trip-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: white;
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.trip-card:hover { border-color: #3498db; box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
+.trip-card h2 { margin: 0 0 10px 0; color: #2c3e50; font-size: 1.2rem; }
+.trip-card p { margin: 0; color: #7f8c8d; font-size: 0.9rem; }
+
+/* =========================================
+   4. Timeline & Drag/Drop (詳細画面)
+========================================= */
+.phase-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.phase-header h1 { margin-bottom: 5px; font-size: 1.4rem; color: #2c3e50; }
+.phase-subtitle { color: #7f8c8d; margin: 0; font-size: 0.9rem; }
+
+.timeline { display: flex; flex-direction: column; gap: 0px; margin-bottom: 40px; }
+.item-wrapper { display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; width: 100%; }
+
+/* 場所の箱本体 */
+.location-box {
+  width: 100%;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px 15px 20px 15px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  text-align: center;
+  cursor: grab;
+  touch-action: none;
+  position: relative;
+  z-index: 2; /* 交通手段より手前 */
+  transition: padding 0.2s;
+}
+
+/* Phase 1 の時は箱を少し小さくする */
+.compact-box { padding: 15px; }
+.compact-box h3 { margin: 0; }
+
+.location-box:active { cursor: grabbing; box-shadow: 0 8px 12px rgba(0,0,0,0.1); transform: scale(1.02); }
+.location-box h3 { margin: 0 0 10px 0; color: #2c3e50; }
+
+/* 滞在時間入力 */
+.duration-wrapper { display: flex; align-items: center; justify-content: center; margin-top: 10px; color: #7f8c8d; font-size: 0.9rem; }
+.duration-select { padding: 6px 10px; margin-left: 10px; border: 1px solid #bdc3c7; border-radius: 4px; font-size: 0.95rem; font-family: inherit; background-color: #fdfdfd; color: #2c3e50; cursor: pointer; }
+
+/* ★変更: 箱の上に配置される交通手段 */
+.transit-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 20px 15px 20px;
+  margin-bottom: -10px; /* 下の箱に少し食い込ませる */
+  background-color: #f8f9fa;
+  border: 2px dashed #bdc3c7;
+  border-bottom: none;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  z-index: 1; /* 箱の奥 */
+}
+.transit-mode-select { border: none; background-color: transparent; color: #34495e; font-size: 0.9rem; cursor: pointer; outline: none; font-weight: bold; }
+.transit-time { color: #3498db; font-weight: bold; }
+
+/* --- 宿泊（次の日）の区切り線 --- */
+.day-break-wrapper { display: flex; justify-content: center; width: 100%; margin: 20px 0; cursor: grab; }
+.day-break-wrapper:active { cursor: grabbing; }
+.day-break-box {
+  background-color: #2c3e50;
+  color: white;
+  padding: 8px 30px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.delete-button-small { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #ecf0f1; cursor: pointer; font-size: 1.2rem; }
+
+/* --- モード切替のトグルスイッチ --- */
+.mode-toggle-container {
+  display: flex;
+  background-color: #f1f2f6;
+  border-radius: 12px;
+  padding: 5px;
+  margin-bottom: 10px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.mode-toggle-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: none;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #7f8c8d;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+/* 選択されているモードの見た目 */
+.mode-toggle-btn.active {
+  background-color: #ffffff;
+  color: #3498db;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.mode-toggle-btn:hover:not(.active) {
+  color: #34495e;
 }
