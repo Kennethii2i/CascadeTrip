@@ -1,20 +1,26 @@
 // src/pages/TripDetail.jsx
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { SortableItem } from '../SortableItem';
 
 export function TripDetail() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // ★追加: 渡されたデータがあればそれを使い、なければデフォルト値を使う
+  const tripTitle = location.state?.title || '東京・京都旅行（計画中）';
+  const defaultTransit = location.state?.defaultTransitMode || 'train';
+
   const [phase, setPhase] = useState('planning');
   const [newLocation, setNewLocation] = useState('');
   
   // ★変更: durationとtransitTimeの初期値を 'auto' にし、バックエンドの計算結果(calculated〜)を持たせる
   const [route, setRoute] = useState([
     { 
-      id: 1, type: 'spot', location: "東京駅", 
-      transitMode: 'train', transitTime: 'auto', calculatedTransitTime: 15, // 移動
+      id: 1, type: 'spot', location: "最初の目的地", 
+      transitMode: defaultTransit, transitTime: 'auto', calculatedTransitTime: 15, // 移動
       duration: 'auto', calculatedDuration: 30 // 滞在
     },
     { 
@@ -45,7 +51,7 @@ export function TripDetail() {
 
     const newItem = { 
       id: Date.now(), type: 'spot', location: newLocation, 
-      transitMode: 'train', transitTime: 'auto', calculatedTransitTime: mockCalcTransit,
+      transitMode: defaultTransit, transitTime: 'auto', calculatedTransitTime: mockCalcTransit,
       duration: 'auto', calculatedDuration: mockCalcDuration
     };
     
@@ -90,6 +96,10 @@ export function TripDetail() {
       </div>
 
       <p className="phase-subtitle" style={{ textAlign: 'center', marginBottom: '20px' }}>
+        {/* ★変更: 受け取ったタイトルを画面に表示する */}
+        <strong style={{ display: 'block', fontSize: '1.2rem', color: '#2c3e50', marginBottom: '5px' }}>
+          {tripTitle}
+        </strong>
         {phase === 'planning' ? '行きたい場所を追加して、順番を並び替えましょう' : '各スポットの滞在時間と、移動手段を設定しましょう'}
       </p>
 
